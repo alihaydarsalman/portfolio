@@ -70,7 +70,7 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-primary); color: var(--text); line-height: 1.7; overflow-x: hidden; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-primary); color: var(--text); line-height: 1.7; overflow-x: hidden; transition: background 0.4s, color 0.4s; }
         ::selection { background: var(--accent-glow-strong); color: #fff; }
 
         .glow-blob { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(120px); opacity: 0.4; }
@@ -83,20 +83,21 @@
         .nav-links { display: flex; gap: 0.5rem; list-style: none; }
         .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.25s; }
         .nav-links a:hover { color: var(--text); background: var(--glass); }
-        .theme-toggle { background: var(--glass); border: 1px solid var(--glass-border); width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.35s; color: var(--text-muted); position: relative; overflow: hidden; flex-shrink: 0; }
-        .theme-toggle:hover { border-color: var(--accent); color: var(--accent-light); background: var(--accent-glow); transform: scale(1.1); }
-        .theme-toggle svg { width: 20px; height: 20px; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.3s; position: absolute; }
-        .theme-toggle .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
-        .theme-toggle .icon-sun { opacity: 0; transform: rotate(-90deg) scale(0.5); }
-        [data-theme="light"] .theme-toggle .icon-moon { opacity: 0; transform: rotate(90deg) scale(0.5); color: #b0bcd4; }
-        [data-theme="light"] .theme-toggle .icon-sun { opacity: 1; transform: rotate(0deg) scale(1); color: #f59e0b; }
+        .nav-btn { background: var(--glass); border: 1px solid var(--glass-border); width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.35s; color: var(--text-muted); position: relative; overflow: hidden; flex-shrink: 0; }
+        .nav-btn:hover { border-color: var(--accent); color: var(--accent-light); background: var(--accent-glow); transform: scale(1.1); }
+        .nav-btn svg { width: 20px; height: 20px; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.3s; position: absolute; }
+        .nav-btn .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
+        .nav-btn .icon-sun { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+        [data-theme="light"] .nav-btn .icon-moon { opacity: 0; transform: rotate(90deg) scale(0.5); }
+        [data-theme="light"] .nav-btn .icon-sun { opacity: 1; transform: rotate(0deg) scale(1); color: #f59e0b; }
+        .lang-toggle { background: var(--glass); border: 1px solid var(--glass-border); height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.35s; color: var(--text-muted); flex-shrink: 0; padding: 0 14px; font-size: 0.78rem; font-weight: 700; font-family: inherit; letter-spacing: 0.03em; }
+        .lang-toggle:hover { border-color: var(--accent); color: var(--accent-light); background: var(--accent-glow); transform: scale(1.08); }
         .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 6px; }
         .hamburger span { width: 22px; height: 2px; background: var(--text-muted); border-radius: 2px; transition: 0.3s; }
 
         .hero { min-height: 100vh; display: flex; align-items: center; padding: 8rem 2rem 6rem; position: relative; }
         .hero-inner { max-width: 1200px; margin: 0 auto; width: 100%; }
         .hero-grid { display: grid; grid-template-columns: 1.3fr 0.7fr; align-items: center; gap: 3rem; }
-        .hero-left { }
         .hero-photo { display: flex; justify-content: center; align-items: center; }
         .photo-wrapper { position: relative; width: 280px; height: 280px; }
         .photo-wrapper img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; position: relative; z-index: 2; border: 3px solid var(--glass-border); }
@@ -221,7 +222,7 @@
         .fade-up.visible { opacity: 1; transform: translateY(0); }
 
         @media (max-width: 768px) {
-            .nav-links { display: none; position: absolute; top: 68px; left: 0; right: 0; background: rgba(10,10,15,0.95); backdrop-filter: blur(20px); flex-direction: column; padding: 1rem; gap: 0.25rem; border-bottom: 1px solid var(--glass-border); }
+            .nav-links { display: none; position: absolute; top: 68px; left: 0; right: 0; background: var(--nav-bg); backdrop-filter: blur(20px); flex-direction: column; padding: 1rem; gap: 0.25rem; border-bottom: 1px solid var(--glass-border); }
             .nav-links.open { display: flex; }
             .hamburger { display: flex; }
             .hero h1 { font-size: 2.4rem; }
@@ -248,14 +249,15 @@
         <div class="nav-inner">
             <a href="#" class="nav-logo">alihaydar salman</a>
             <ul class="nav-links" id="navLinks">
-                <li><a href="#hakkimda">Hakkımda</a></li>
-                <li><a href="#teknolojiler">Teknolojiler</a></li>
-                <li><a href="#deneyim">Deneyim</a></li>
-                <li><a href="#projeler">Projeler</a></li>
-                <li><a href="#iletisim">İletişim</a></li>
+                <li><a href="#hakkimda" data-i18n="nav_about">Hakkımda</a></li>
+                <li><a href="#teknolojiler" data-i18n="nav_tech">Teknolojiler</a></li>
+                <li><a href="#deneyim" data-i18n="nav_exp">Deneyim</a></li>
+                <li><a href="#projeler" data-i18n="nav_projects">Projeler</a></li>
+                <li><a href="#iletisim" data-i18n="nav_contact">İletişim</a></li>
             </ul>
             <div style="display:flex;align-items:center;gap:0.5rem;">
-                <button class="theme-toggle" id="themeToggle" aria-label="Tema Değiştir" title="Dark / Light Mod">
+                <button class="lang-toggle" id="langToggle" aria-label="Dil Değiştir" title="TR / EN">EN</button>
+                <button class="nav-btn" id="themeToggle" aria-label="Tema Değiştir" title="Dark / Light Mod">
                     <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
                     <svg class="icon-sun" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Zm11.394-5.834a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59Zm-12.728.53a.75.75 0 1 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18Zm4.834-1.894a.75.75 0 0 0-1.06 1.06l1.59 1.591a.75.75 0 1 0 1.06-1.06l-1.59-1.591Zm-8.608 1.06a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12Z"/></svg>
                 </button>
@@ -267,13 +269,13 @@
     <section class="hero">
         <div class="hero-inner hero-grid">
             <div class="hero-left">
-            <div class="hero-eyebrow"><span class="dot"></span> Turkish Technology — TKPAY Open Wallet</div>
-            <h1>Merhaba, ben<br><span class="gradient-text">Alihaydar SALMAN</span></h1>
-            <p class="hero-desc">Fintech alanında dijital cüzdan ve ödeme sistemleri üzerine uzmanlaşmış bir backend geliştiriciyim. Temiz mimari, yüksek performans ve ölçeklenebilir çözümler üretiyorum.</p>
+            <div class="hero-eyebrow"><span class="dot"></span> <span data-i18n="hero_eyebrow">Turkish Technology — TKPAY Open Wallet</span></div>
+            <h1 data-i18n-html="hero_title">Merhaba, ben<br><span class="gradient-text">Alihaydar SALMAN</span></h1>
+            <p class="hero-desc" data-i18n="hero_desc">Fintech alanında dijital cüzdan ve ödeme sistemleri üzerine uzmanlaşmış bir backend geliştiriciyim. Temiz mimari, yüksek performans ve ölçeklenebilir çözümler üretiyorum.</p>
             <div class="hero-stack"><span>Java</span><span>Kotlin</span><span>Spring Boot</span><span>Microservices</span><span>Kafka</span><span>PostgreSQL</span><span>Kubernetes</span></div>
             <div class="hero-actions">
-                <a href="#deneyim" class="btn-glow primary">Deneyimimi Gör ↓</a>
-                <a href="#iletisim" class="btn-glow ghost">İletişime Geç</a>
+                <a href="#deneyim" class="btn-glow primary" data-i18n="hero_btn_exp">Deneyimimi Gör ↓</a>
+                <a href="#iletisim" class="btn-glow ghost" data-i18n="hero_btn_contact">İletişime Geç</a>
             </div>
             </div>
             <div class="hero-photo">
@@ -287,78 +289,78 @@
 
     <section id="hakkimda">
         <div class="section-inner">
-            <div class="section-header fade-up"><div class="section-tag">Hakkımda</div><h2 class="section-title">Ben Kimim</h2></div>
+            <div class="section-header fade-up"><div class="section-tag" data-i18n="about_tag">Hakkımda</div><h2 class="section-title" data-i18n="about_title">Ben Kimim</h2></div>
             <div class="about-card fade-up">
-                <p><strong>Erciyes Üniversitesi Bilgisayar Mühendisliği</strong> mezunuyum. Kariyerime 2022 yılında başlayarak, öncelikle <strong>Turkcell Teknoloji</strong>'de faturalama ve e-fatura sistemleri üzerinde çalıştım. Ayda milyonlarca fatura işlenen yüksek hacimli sistemlerde deneyim kazandım ve ağır monolith yapıdaki projenin mikroservis mimarisine geçiş projelerinde aktif rol aldım.</p>
-                <p>Ocak 2024'ten itibaren <strong>Turkish Technology</strong> (Türk Hava Yolları grup şirketi) bünyesinde görev alıyorum. <strong>Fintech</strong> alanında, dijital cüzdan ve ödeme teknolojileri üzerinde çalışmaktayım. Türk Hava Yolları'nın kendi kullanımı için geliştirilen kapalı devre cüzdan uygulamasından başlayarak, <strong> açık devre cüzdan olan TKPay cüzdan uygulamasının</strong> kuruluşundan öncesinden beri backend geliştirici olarak ekipte yer alıyorum.</p>
-                <p>Fintech sektöründe çalışmak, her satır kodun doğrudan <strong>gerçek para hareketlerini</strong> etkilediği bir ortam demektir. Kullanıcıların cüzdan bakiyelerinden ödeme işlemlerine, KYC doğrulamalarından kampanya komisyon hesaplamalarına kadar her operasyonda <strong>sıfır hata toleransı</strong> ile çalışıyorum. Bu kritik sorumluluk bilinciyle; yüksek erişilebilirlik sağlayan <strong>event-driven mikroservis mimarisi</strong>, hassas finansal verileri koruyan <strong>end-to-end şifreleme ve Vault tabanlı secret yönetimi</strong>, Keycloak ile <strong>rol bazlı erişim kontrolü (RBAC)</strong> ve Kafka üzerinden <strong>asenkron, güvenilir mesajlaşma altyapıları</strong> tasarlayıp geliştirdim. Regülasyona uyum, denetlenebilirlik ve veri bütünlüğü her zaman önceliklerim arasında yer alıyor.</p>
-                <p>TKPay'in açık devre cüzdan sisteminde <strong>Core, Identity (KYC &amp; yüz tanıma), Campaign, Banking, Notification ve Backoffice</strong> modüllerinde aktif olarak çalıştım. Kapalı ve açık devre cüzdan uygulamalarının entegrasyonu ile birlikte, çoklu iş ortağı yapısını destekleyen yeni nesil sistem mimarisinin geliştirilmesinde başından beri yer aldım.</p>
-                <p>Temiz kod, sahiplik bilinci ve ürünün tüm yaşam döngüsü boyunca sorumluluk almak benim için temel değerler. Sürekli öğrenmeye ve yeni teknolojilere adapte olmaya büyük önem veriyorum.</p>
+                <p data-i18n-html="about_p1"><strong>Erciyes Üniversitesi Bilgisayar Mühendisliği</strong> mezunuyum. Kariyerime 2022 yılında başlayarak, öncelikle <strong>Turkcell Teknoloji</strong>'de faturalama ve e-fatura sistemleri üzerinde çalıştım. Ayda milyonlarca fatura işlenen yüksek hacimli sistemlerde deneyim kazandım ve ağır monolith yapıdaki projenin mikroservis mimarisine geçiş projelerinde aktif rol aldım.</p>
+                <p data-i18n-html="about_p2">Ocak 2024'ten itibaren <strong>Turkish Technology</strong> (Türk Hava Yolları grup şirketi) bünyesinde görev alıyorum. <strong>Fintech</strong> alanında, dijital cüzdan ve ödeme teknolojileri üzerinde çalışmaktayım. Türk Hava Yolları'nın kendi kullanımı için geliştirilen kapalı devre cüzdan uygulamasından başlayarak, <strong> açık devre cüzdan olan TKPay cüzdan uygulamasının</strong> kuruluşundan öncesinden beri backend geliştirici olarak ekipte yer alıyorum.</p>
+                <p data-i18n-html="about_p3">Fintech sektöründe çalışmak, her satır kodun doğrudan <strong>gerçek para hareketlerini</strong> etkilediği bir ortam demektir. Kullanıcıların cüzdan bakiyelerinden ödeme işlemlerine, KYC doğrulamalarından kampanya komisyon hesaplamalarına kadar her operasyonda <strong>sıfır hata toleransı</strong> ile çalışıyorum. Bu kritik sorumluluk bilinciyle; yüksek erişilebilirlik sağlayan <strong>event-driven mikroservis mimarisi</strong>, hassas finansal verileri koruyan <strong>end-to-end şifreleme ve Vault tabanlı secret yönetimi</strong>, Keycloak ile <strong>rol bazlı erişim kontrolü (RBAC)</strong> ve Kafka üzerinden <strong>asenkron, güvenilir mesajlaşma altyapıları</strong> tasarlayıp geliştirdim. Regülasyona uyum, denetlenebilirlik ve veri bütünlüğü her zaman önceliklerim arasında yer alıyor.</p>
+                <p data-i18n-html="about_p4">TKPay'in açık devre cüzdan sisteminde <strong>Core, Identity (KYC &amp; yüz tanıma), Campaign, Banking, Notification ve Backoffice</strong> modüllerinde aktif olarak çalıştım. Kapalı ve açık devre cüzdan uygulamalarının entegrasyonu ile birlikte, çoklu iş ortağı yapısını destekleyen yeni nesil sistem mimarisinin geliştirilmesinde başından beri yer aldım.</p>
+                <p data-i18n="about_p5">Temiz kod, sahiplik bilinci ve ürünün tüm yaşam döngüsü boyunca sorumluluk almak benim için temel değerler. Sürekli öğrenmeye ve yeni teknolojilere adapte olmaya büyük önem veriyorum.</p>
             </div>
             <div class="stats-grid fade-up">
-                <div class="stat-item"><span class="stat-value purple">3.5+</span><span class="stat-label">Yıl Deneyim</span></div>
-                <div class="stat-item"><span class="stat-value cyan">2</span><span class="stat-label">Büyük Şirket</span></div>
-                <div class="stat-item"><span class="stat-value amber">Fintech</span><span class="stat-label">Uzmanlık Alanı</span></div>
-                <div class="stat-item"><span class="stat-value green">TKPay</span><span class="stat-label">Kurucu Ekip</span></div>
+                <div class="stat-item"><span class="stat-value purple">3.5+</span><span class="stat-label" data-i18n="stat_exp">Yıl Deneyim</span></div>
+                <div class="stat-item"><span class="stat-value cyan">2</span><span class="stat-label" data-i18n="stat_company">Büyük Şirket</span></div>
+                <div class="stat-item"><span class="stat-value amber">Fintech</span><span class="stat-label" data-i18n="stat_domain">Uzmanlık Alanı</span></div>
+                <div class="stat-item"><span class="stat-value green">TKPay</span><span class="stat-label" data-i18n="stat_founder">Kurucu Ekip</span></div>
             </div>
         </div>
     </section>
 
     <section id="teknolojiler">
         <div class="section-inner">
-            <div class="section-header fade-up"><div class="section-tag">Teknoloji Yığını</div><h2 class="section-title">Kullandığım Teknolojiler</h2><p class="section-subtitle">Yıllar içerisinde çeşitli projeler ve üretim ortamlarında deneyim kazandığım teknoloji ekosistemi.</p></div>
+            <div class="section-header fade-up"><div class="section-tag" data-i18n="tech_tag">Teknoloji Yığını</div><h2 class="section-title" data-i18n="tech_title">Kullandığım Teknolojiler</h2><p class="section-subtitle" data-i18n="tech_subtitle">Yıllar içerisinde çeşitli projeler ve üretim ortamlarında deneyim kazandığım teknoloji ekosistemi.</p></div>
             <div class="tech-grid">
-                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--accent-light)"></span> Diller &amp; Framework'ler</div><div class="tech-tags"><span class="tech-tag">Java</span><span class="tech-tag">Kotlin</span><span class="tech-tag">Spring Boot</span><span class="tech-tag">Hibernate</span></div></div>
-                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--cyan)"></span> Mimari &amp; Entegrasyon</div><div class="tech-tags"><span class="tech-tag">Microservices</span><span class="tech-tag">RESTful API</span><span class="tech-tag">SOAP</span><span class="tech-tag">Activiti (BPM)</span></div></div>
-                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--amber)"></span> Mesajlaşma &amp; Streaming</div><div class="tech-tags"><span class="tech-tag">Apache Kafka</span></div></div>
-                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--green)"></span> Veritabanı &amp; Depolama</div><div class="tech-tags"><span class="tech-tag">PostgreSQL</span><span class="tech-tag">MinIO</span><span class="tech-tag">Keycloak</span><span class="tech-tag">Vault</span></div></div>
-                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--rose)"></span> Test &amp; API Araçları</div><div class="tech-tags"><span class="tech-tag">JUnit</span><span class="tech-tag">Postman</span><span class="tech-tag">SoapUI</span></div></div>
-                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:#a78bfa"></span> DevOps &amp; CI/CD</div><div class="tech-tags"><span class="tech-tag">Jenkins</span><span class="tech-tag">Kubernetes</span><span class="tech-tag">OpenShift</span><span class="tech-tag">Docker</span></div></div>
-                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--cyan)"></span> Versiyon Kontrolü</div><div class="tech-tags"><span class="tech-tag">Git</span><span class="tech-tag">Bitbucket</span><span class="tech-tag">GitLab</span><span class="tech-tag">GitHub</span></div></div>
+                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--accent-light)"></span> <span data-i18n="tech_lang">Diller &amp; Framework'ler</span></div><div class="tech-tags"><span class="tech-tag">Java</span><span class="tech-tag">Kotlin</span><span class="tech-tag">Spring Boot</span><span class="tech-tag">Hibernate</span></div></div>
+                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--cyan)"></span> <span data-i18n="tech_arch">Mimari &amp; Entegrasyon</span></div><div class="tech-tags"><span class="tech-tag">Microservices</span><span class="tech-tag">RESTful API</span><span class="tech-tag">SOAP</span><span class="tech-tag">Activiti (BPM)</span></div></div>
+                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--amber)"></span> <span data-i18n="tech_msg">Mesajlaşma &amp; Streaming</span></div><div class="tech-tags"><span class="tech-tag">Apache Kafka</span></div></div>
+                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--green)"></span> <span data-i18n="tech_db">Veritabanı &amp; Depolama</span></div><div class="tech-tags"><span class="tech-tag">PostgreSQL</span><span class="tech-tag">MinIO</span><span class="tech-tag">Keycloak</span><span class="tech-tag">Vault</span></div></div>
+                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--rose)"></span> <span data-i18n="tech_test">Test &amp; API Araçları</span></div><div class="tech-tags"><span class="tech-tag">JUnit</span><span class="tech-tag">Postman</span><span class="tech-tag">SoapUI</span></div></div>
+                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:#a78bfa"></span> <span data-i18n="tech_devops">DevOps &amp; CI/CD</span></div><div class="tech-tags"><span class="tech-tag">Jenkins</span><span class="tech-tag">Kubernetes</span><span class="tech-tag">OpenShift</span><span class="tech-tag">Docker</span></div></div>
+                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--cyan)"></span> <span data-i18n="tech_vcs">Versiyon Kontrolü</span></div><div class="tech-tags"><span class="tech-tag">Git</span><span class="tech-tag">Bitbucket</span><span class="tech-tag">GitLab</span><span class="tech-tag">GitHub</span></div></div>
             </div>
         </div>
     </section>
 
     <section id="deneyim">
         <div class="section-inner">
-            <div class="section-header fade-up"><div class="section-tag">Deneyim</div><h2 class="section-title">Kariyer Yolculuğum</h2><p class="section-subtitle">Turkcell'den Türk Hava Yolları ekosistemine uzanan profesyonel gelişim hikayem.</p></div>
+            <div class="section-header fade-up"><div class="section-tag" data-i18n="exp_tag">Deneyim</div><h2 class="section-title" data-i18n="exp_title">Kariyer Yolculuğum</h2><p class="section-subtitle" data-i18n="exp_subtitle">Turkcell'den Türk Hava Yolları ekosistemine uzanan profesyonel gelişim hikayem.</p></div>
             <div class="exp-list">
                 <div class="exp-card active fade-up">
-                    <div class="exp-top"><div><div class="exp-company">Turkish Technology - TKPAY</div><div class="exp-role">Software Developer</div></div><div class="exp-meta"><span class="exp-active-badge">Aktif</span><span class="exp-date">Ocak 2024 — Devam Ediyor</span></div></div>
+                    <div class="exp-top"><div><div class="exp-company">Turkish Technology - TKPAY</div><div class="exp-role">Software Developer</div></div><div class="exp-meta"><span class="exp-active-badge" data-i18n="exp_active">Aktif</span><span class="exp-date" data-i18n="exp_date_tt">Ocak 2024 — Devam Ediyor</span></div></div>
                     <div class="exp-desc">
-                        <p>Türk Hava Yolları'na ait Turkish Technology bünyesinde fintech alanında dijital cüzdan ve ödeme sistemleri geliştiriyorum.</p>
+                        <p data-i18n="exp_tt_desc">Türk Hava Yolları'na ait Turkish Technology bünyesinde fintech alanında dijital cüzdan ve ödeme sistemleri geliştiriyorum.</p>
                         <ul>
-                            <li>İlk aylarda THY için kapalı devre cüzdan uygulamasının <strong>core katmanında</strong> backend geliştirme çalışmaları</li>
-                            <li>Mayıs 2024'te mikroservis tabanlı <strong>açık devre cüzdan uygulamasının</strong> (REST-based, multi-module) geliştirilmesine başlama</li>
-                            <li><strong>Backoffice, Core (cüzdan limitleri, kampanyalar, komisyonlar, işlemler, müşteri domainleri), Identity (KYC &amp; yüz tanıma), Campaign, Banking, Notification</strong> modüllerinde aktif geliştirme</li>
-                            <li>Kapalı ve açık devre cüzdan uygulamalarının <strong>entegrasyon ve birleştirme</strong> sürecinde yer alma</li>
-                            <li>Lisanslama altyapısının tamamlanmasının ardından <strong>TKPay</strong> markası altında çoklu iş ortağı yapısını destekleyen yeni sistemin geliştirilmesinde kurucu ekipte yer alma</li>
+                            <li data-i18n-html="exp_tt_li1">İlk aylarda THY için kapalı devre cüzdan uygulamasının <strong>core katmanında</strong> backend geliştirme çalışmaları</li>
+                            <li data-i18n-html="exp_tt_li2">Mayıs 2024'te mikroservis tabanlı <strong>açık devre cüzdan uygulamasının</strong> (REST-based, multi-module) geliştirilmesine başlama</li>
+                            <li data-i18n-html="exp_tt_li3"><strong>Backoffice, Core (cüzdan limitleri, kampanyalar, komisyonlar, işlemler, müşteri domainleri), Identity (KYC &amp; yüz tanıma), Campaign, Banking, Notification</strong> modüllerinde aktif geliştirme</li>
+                            <li data-i18n-html="exp_tt_li4">Kapalı ve açık devre cüzdan uygulamalarının <strong>entegrasyon ve birleştirme</strong> sürecinde yer alma</li>
+                            <li data-i18n-html="exp_tt_li5">Lisanslama altyapısının tamamlanmasının ardından <strong>TKPay</strong> markası altında çoklu iş ortağı yapısını destekleyen yeni sistemin geliştirilmesinde kurucu ekipte yer alma</li>
                         </ul>
                         <div class="exp-techs"><span class="exp-tech">Java 17</span><span class="exp-tech">Spring Boot</span><span class="exp-tech">Microservices</span><span class="exp-tech">Kafka</span><span class="exp-tech">PostgreSQL</span><span class="exp-tech">Keycloak</span><span class="exp-tech">Kubernetes</span></div>
                     </div>
                 </div>
                 <div class="exp-card fade-up">
-                    <div class="exp-top"><div><div class="exp-company">Turkcell Technology</div><div class="exp-role">Software Developer</div></div><span class="exp-date">Ağustos 2022 — Ocak 2024</span></div>
+                    <div class="exp-top"><div><div class="exp-company">Turkcell Technology</div><div class="exp-role">Software Developer</div></div><span class="exp-date" data-i18n="exp_date_tc">Ağustos 2022 — Ocak 2024</span></div>
                     <div class="exp-desc">
-                        <p>Turkcell Grup Şirketleri için ayda milyonlarca fatura işlenen faturalama uygulamalarında çalıştım.</p>
+                        <p data-i18n="exp_tc_desc">Turkcell Grup Şirketleri için ayda milyonlarca fatura işlenen faturalama uygulamalarında çalıştım.</p>
                         <ul>
-                            <li>GİB'e UBL formatında e-fatura istekleri gönderilmesi ve faturalama akışının yönetimi</li>
-                            <li>Yeni özellik geliştirme ve bug fix süreçleri ile proje kalitesinin sahiplenilmesi</li>
-                            <li><strong>Microservices Redesign:</strong> Monolith yapıdaki SOAP ile haberleşen eski uygulamadan RESTful-Mikroservis mimarisine geçişte aktif geliştirme</li>
+                            <li data-i18n="exp_tc_li1">GİB'e UBL formatında e-fatura istekleri gönderilmesi ve faturalama akışının yönetimi</li>
+                            <li data-i18n="exp_tc_li2">Yeni özellik geliştirme ve bug fix süreçleri ile proje kalitesinin sahiplenilmesi</li>
+                            <li data-i18n-html="exp_tc_li3"><strong>Microservices Redesign:</strong> Monolith yapıdaki SOAP ile haberleşen eski uygulamadan RESTful-Mikroservis mimarisine geçişte aktif geliştirme</li>
                         </ul>
                         <div class="exp-techs"><span class="exp-tech">Java 8</span><span class="exp-tech">Spring Boot</span><span class="exp-tech">SOAP</span><span class="exp-tech">Microservices</span><span class="exp-tech">Jenkins</span></div>
                     </div>
                 </div>
                 <div class="exp-card fade-up">
-                    <div class="exp-top"><div><div class="exp-company">IAS (Industrial Application Software)</div><div class="exp-role">Stajyer</div></div><span class="exp-date">Mart 2022 — Mayıs 2022</span></div>
+                    <div class="exp-top"><div><div class="exp-company">IAS (Industrial Application Software)</div><div class="exp-role" data-i18n="exp_role_intern">Stajyer</div></div><span class="exp-date" data-i18n="exp_date_ias">Mart 2022 — Mayıs 2022</span></div>
                     <div class="exp-desc">
-                        <p>Canias ERP projesi için Java 8 ile I18N çalışması. Spring Boot üzerine şirket içi sunum ve RESTful Blog API geliştirmesi.</p>
+                        <p data-i18n="exp_ias_desc">Canias ERP projesi için Java 8 ile I18N çalışması. Spring Boot üzerine şirket içi sunum ve RESTful Blog API geliştirmesi.</p>
                         <div class="exp-techs"><span class="exp-tech">Java 8</span><span class="exp-tech">Spring Boot</span><span class="exp-tech">REST API</span></div>
                     </div>
                 </div>
                 <div class="exp-card fade-up">
-                    <div class="exp-top"><div><div class="exp-company">Erciyes Üniversitesi</div><div class="exp-role">Bilgisayar Mühendisliği — GPA: 3.23</div></div><span class="exp-date">2017 — 2022</span></div>
-                    <div class="exp-desc"><p>Bilgisayar Mühendisliği lisans programı. Yazılım geliştirme, veri yapıları, algoritmalar ve sistem tasarımı konularında kapsamlı eğitim.</p></div>
+                    <div class="exp-top"><div><div class="exp-company" data-i18n="exp_uni">Erciyes Üniversitesi</div><div class="exp-role" data-i18n="exp_role_uni">Bilgisayar Mühendisliği — GPA: 3.23</div></div><span class="exp-date">2017 — 2022</span></div>
+                    <div class="exp-desc"><p data-i18n="exp_uni_desc">Bilgisayar Mühendisliği lisans programı. Yazılım geliştirme, veri yapıları, algoritmalar ve sistem tasarımı konularında kapsamlı eğitim.</p></div>
                 </div>
             </div>
         </div>
@@ -366,33 +368,33 @@
 
     <section id="projeler">
         <div class="section-inner">
-            <div class="section-header fade-up"><div class="section-tag">Projeler</div><h2 class="section-title">Öne Çıkan Çalışmalarım</h2><p class="section-subtitle">Profesyonel kariyerimde yer aldığım önemli projeler.</p></div>
+            <div class="section-header fade-up"><div class="section-tag" data-i18n="proj_tag">Projeler</div><h2 class="section-title" data-i18n="proj_title">Öne Çıkan Çalışmalarım</h2><p class="section-subtitle" data-i18n="proj_subtitle">Profesyonel kariyerimde yer aldığım önemli projeler.</p></div>
             <div class="project-grid">
-                <div class="proj-card fade-up"><div class="proj-icon">💳</div><h3>TKPay Dijital Cüzdan</h3><p>THY grup şirketi TKPay'in açık devre cüzdan uygulaması. KYC, yüz tanıma, kampanya yönetimi, komisyon sistemi ve çoklu iş ortağı desteği.</p><div class="proj-tags"><span class="proj-tag">Java 17</span><span class="proj-tag">Spring Boot</span><span class="proj-tag">Kafka</span><span class="proj-tag">PostgreSQL</span></div></div>
-                <div class="proj-card fade-up"><div class="proj-icon">✈</div><h3>THY Kapalı Devre Cüzdan</h3><p>Türk Hava Yolları için geliştirilen kapalı devre cüzdan uygulaması. Şirket içi ödeme ve bakiye yönetim sistemi.</p><div class="proj-tags"><span class="proj-tag">Java</span><span class="proj-tag">Microservices</span><span class="proj-tag">Keycloak</span></div></div>
-                <div class="proj-card fade-up"><div class="proj-icon">📄</div><h3>Turkcell E-Fatura Sistemi</h3><p>Turkcell Grup şirketleri için ayda milyonlarca fatura işlenen e-faturalama platformu. GİB entegrasyonu ve UBL format desteği.</p><div class="proj-tags"><span class="proj-tag">Java 8</span><span class="proj-tag">SOAP</span><span class="proj-tag">Jenkins</span></div></div>
+                <div class="proj-card fade-up"><div class="proj-icon">💳</div><h3 data-i18n="proj1_title">TKPay Dijital Cüzdan</h3><p data-i18n="proj1_desc">THY grup şirketi TKPay'in açık devre cüzdan uygulaması. KYC, yüz tanıma, kampanya yönetimi, komisyon sistemi ve çoklu iş ortağı desteği.</p><div class="proj-tags"><span class="proj-tag">Java 17</span><span class="proj-tag">Spring Boot</span><span class="proj-tag">Kafka</span><span class="proj-tag">PostgreSQL</span></div></div>
+                <div class="proj-card fade-up"><div class="proj-icon">✈</div><h3 data-i18n="proj2_title">THY Kapalı Devre Cüzdan</h3><p data-i18n="proj2_desc">Türk Hava Yolları için geliştirilen kapalı devre cüzdan uygulaması. Şirket içi ödeme ve bakiye yönetim sistemi.</p><div class="proj-tags"><span class="proj-tag">Java</span><span class="proj-tag">Microservices</span><span class="proj-tag">Keycloak</span></div></div>
+                <div class="proj-card fade-up"><div class="proj-icon">📄</div><h3 data-i18n="proj3_title">Turkcell E-Fatura Sistemi</h3><p data-i18n="proj3_desc">Turkcell Grup şirketleri için ayda milyonlarca fatura işlenen e-faturalama platformu. GİB entegrasyonu ve UBL format desteği.</p><div class="proj-tags"><span class="proj-tag">Java 8</span><span class="proj-tag">SOAP</span><span class="proj-tag">Jenkins</span></div></div>
             </div>
         </div>
     </section>
 
     <section id="iletisim">
         <div class="section-inner">
-            <div class="section-header fade-up"><div class="section-tag">İletişim</div><h2 class="section-title">Birlikte Çalışalım</h2></div>
+            <div class="section-header fade-up"><div class="section-tag" data-i18n="contact_tag">İletişim</div><h2 class="section-title" data-i18n="contact_title">Birlikte Çalışalım</h2></div>
             <div class="contact-grid">
                 <div class="contact-text fade-up">
-                    <p>Bir projeniz mi var ya da fintech alanında işbirliği mi yapmak istiyorsunuz? Aşağıdaki formu doldurun veya doğrudan ulaşın.</p>
+                    <p data-i18n="contact_desc">Bir projeniz mi var ya da fintech alanında işbirliği mi yapmak istiyorsunuz? Aşağıdaki formu doldurun veya doğrudan ulaşın.</p>
                     <div class="contact-links">
-                        <a href="mailto:salmanalihaydarr@gmail.com" class="contact-link"><div class="cl-icon mail">@</div><div class="cl-text"><span class="cl-label">E-posta</span><span class="cl-value">salmanalihaydarr@gmail.com</span></div></a>
+                        <a href="mailto:salmanalihaydarr@gmail.com" class="contact-link"><div class="cl-icon mail">@</div><div class="cl-text"><span class="cl-label" data-i18n="cl_email">E-posta</span><span class="cl-value">salmanalihaydarr@gmail.com</span></div></a>
                         <a href="https://linkedin.com/in/alihaydarsalman" target="_blank" class="contact-link"><div class="cl-icon linkedin">in</div><div class="cl-text"><span class="cl-label">LinkedIn</span><span class="cl-value">linkedin.com/in/alihaydarsalman</span></div></a>
                         <a href="https://github.com/alihaydarsalman" target="_blank" class="contact-link"><div class="cl-icon github">GH</div><div class="cl-text"><span class="cl-label">GitHub</span><span class="cl-value">github.com/alihaydarsalman</span></div></a>
-                        <div class="contact-link" style="cursor:default;"><div class="cl-icon loc">⚲</div><div class="cl-text"><span class="cl-label">Konum</span><span class="cl-value">İstanbul, Türkiye</span></div></div>
+                        <div class="contact-link" style="cursor:default;"><div class="cl-icon loc">⚲</div><div class="cl-text"><span class="cl-label" data-i18n="cl_location">Konum</span><span class="cl-value" data-i18n="cl_location_val">İstanbul, Türkiye</span></div></div>
                     </div>
                 </div>
                 <form class="contact-form-card fade-up" onsubmit="handleSubmit(event)">
-                    <div class="form-group"><label for="name">Adınız</label><input type="text" id="name" placeholder="Adınızı girin" required></div>
-                    <div class="form-group"><label for="email">E-posta</label><input type="email" id="email" placeholder="ornek@email.com" required></div>
-                    <div class="form-group"><label for="message">Mesajınız</label><textarea id="message" placeholder="Projeniz hakkında bilgi verin..." required></textarea></div>
-                    <button type="submit" class="btn-submit">Mesaj Gönder</button>
+                    <div class="form-group"><label for="name" data-i18n="form_name">Adınız</label><input type="text" id="name" data-i18n-ph="form_name_ph" placeholder="Adınızı girin" required></div>
+                    <div class="form-group"><label for="email" data-i18n="form_email">E-posta</label><input type="email" id="email" data-i18n-ph="form_email_ph" placeholder="ornek@email.com" required></div>
+                    <div class="form-group"><label for="message" data-i18n="form_msg">Mesajınız</label><textarea id="message" data-i18n-ph="form_msg_ph" placeholder="Projeniz hakkında bilgi verin..." required></textarea></div>
+                    <button type="submit" class="btn-submit" data-i18n="form_submit">Mesaj Gönder</button>
                 </form>
             </div>
         </div>
@@ -410,28 +412,144 @@
     </footer>
 
     <script>
+        // --- Hamburger ---
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
         hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
         navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('open')));
+
+        // --- Scroll Animation ---
         const obs = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.08 });
         document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
-        function handleSubmit(e) { e.preventDefault(); const btn = e.target.querySelector('.btn-submit'); btn.textContent = 'Gönderildi!'; btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)'; setTimeout(() => { btn.textContent = 'Mesaj Gönder'; btn.style.background = ''; e.target.reset(); }, 2500); }
 
-        // Theme Toggle (Güneş / Hilal)
+        // --- Form Submit ---
+        function handleSubmit(e) { e.preventDefault(); const btn = e.target.querySelector('.btn-submit'); const lang = document.documentElement.getAttribute('data-lang') || 'tr'; btn.textContent = lang === 'en' ? 'Sent!' : 'Gönderildi!'; btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)'; setTimeout(() => { btn.textContent = translations[lang].form_submit; btn.style.background = ''; e.target.reset(); }, 2500); }
+
+        // --- Theme Toggle ---
         const themeToggle = document.getElementById('themeToggle');
-        const html = document.documentElement;
         const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') html.setAttribute('data-theme', 'light');
+        if (savedTheme === 'light') document.documentElement.setAttribute('data-theme', 'light');
         themeToggle.addEventListener('click', () => {
-            const isLight = html.getAttribute('data-theme') === 'light';
-            if (isLight) {
-                html.removeAttribute('data-theme');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                html.setAttribute('data-theme', 'light');
-                localStorage.setItem('theme', 'light');
+            const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+            if (isLight) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('theme', 'dark'); }
+            else { document.documentElement.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); }
+        });
+
+        // --- i18n ---
+        const translations = {
+            tr: {
+                nav_about: 'Hakkımda', nav_tech: 'Teknolojiler', nav_exp: 'Deneyim', nav_projects: 'Projeler', nav_contact: 'İletişim',
+                hero_eyebrow: 'Turkish Technology — TKPAY Open Wallet',
+                hero_title: 'Merhaba, ben<br><span class="gradient-text">Alihaydar SALMAN</span>',
+                hero_desc: 'Fintech alanında dijital cüzdan ve ödeme sistemleri üzerine uzmanlaşmış bir backend geliştiriciyim. Temiz mimari, yüksek performans ve ölçeklenebilir çözümler üretiyorum.',
+                hero_btn_exp: 'Deneyimimi Gör ↓', hero_btn_contact: 'İletişime Geç',
+                about_tag: 'Hakkımda', about_title: 'Ben Kimim',
+                about_p1: '<strong>Erciyes Üniversitesi Bilgisayar Mühendisliği</strong> mezunuyum. Kariyerime 2022 yılında başlayarak, öncelikle <strong>Turkcell Teknoloji</strong>\'de faturalama ve e-fatura sistemleri üzerinde çalıştım. Ayda milyonlarca fatura işlenen yüksek hacimli sistemlerde deneyim kazandım ve ağır monolith yapıdaki projenin mikroservis mimarisine geçiş projelerinde aktif rol aldım.',
+                about_p2: 'Ocak 2024\'ten itibaren <strong>Turkish Technology</strong> (Türk Hava Yolları grup şirketi) bünyesinde görev alıyorum. <strong>Fintech</strong> alanında, dijital cüzdan ve ödeme teknolojileri üzerinde çalışmaktayım. Türk Hava Yolları\'nın kendi kullanımı için geliştirilen kapalı devre cüzdan uygulamasından başlayarak, <strong> açık devre cüzdan olan TKPay cüzdan uygulamasının</strong> kuruluşundan öncesinden beri backend geliştirici olarak ekipte yer alıyorum.',
+                about_p3: 'Fintech sektöründe çalışmak, her satır kodun doğrudan <strong>gerçek para hareketlerini</strong> etkilediği bir ortam demektir. Kullanıcıların cüzdan bakiyelerinden ödeme işlemlerine, KYC doğrulamalarından kampanya komisyon hesaplamalarına kadar her operasyonda <strong>sıfır hata toleransı</strong> ile çalışıyorum. Bu kritik sorumluluk bilinciyle; yüksek erişilebilirlik sağlayan <strong>event-driven mikroservis mimarisi</strong>, hassas finansal verileri koruyan <strong>end-to-end şifreleme ve Vault tabanlı secret yönetimi</strong>, Keycloak ile <strong>rol bazlı erişim kontrolü (RBAC)</strong> ve Kafka üzerinden <strong>asenkron, güvenilir mesajlaşma altyapıları</strong> tasarlayıp geliştirdim. Regülasyona uyum, denetlenebilirlik ve veri bütünlüğü her zaman önceliklerim arasında yer alıyor.',
+                about_p4: 'TKPay\'in açık devre cüzdan sisteminde <strong>Core, Identity (KYC &amp; yüz tanıma), Campaign, Banking, Notification ve Backoffice</strong> modüllerinde aktif olarak çalıştım. Kapalı ve açık devre cüzdan uygulamalarının entegrasyonu ile birlikte, çoklu iş ortağı yapısını destekleyen yeni nesil sistem mimarisinin geliştirilmesinde başından beri yer aldım.',
+                about_p5: 'Temiz kod, sahiplik bilinci ve ürünün tüm yaşam döngüsü boyunca sorumluluk almak benim için temel değerler. Sürekli öğrenmeye ve yeni teknolojilere adapte olmaya büyük önem veriyorum.',
+                stat_exp: 'Yıl Deneyim', stat_company: 'Büyük Şirket', stat_domain: 'Uzmanlık Alanı', stat_founder: 'Kurucu Ekip',
+                tech_tag: 'Teknoloji Yığını', tech_title: 'Kullandığım Teknolojiler', tech_subtitle: 'Yıllar içerisinde çeşitli projeler ve üretim ortamlarında deneyim kazandığım teknoloji ekosistemi.',
+                tech_lang: 'Diller & Framework\'ler', tech_arch: 'Mimari & Entegrasyon', tech_msg: 'Mesajlaşma & Streaming', tech_db: 'Veritabanı & Depolama', tech_test: 'Test & API Araçları', tech_devops: 'DevOps & CI/CD', tech_vcs: 'Versiyon Kontrolü',
+                exp_tag: 'Deneyim', exp_title: 'Kariyer Yolculuğum', exp_subtitle: 'Turkcell\'den Türk Hava Yolları ekosistemine uzanan profesyonel gelişim hikayem.',
+                exp_active: 'Aktif', exp_date_tt: 'Ocak 2024 — Devam Ediyor',
+                exp_tt_desc: 'Türk Hava Yolları\'na ait Turkish Technology bünyesinde fintech alanında dijital cüzdan ve ödeme sistemleri geliştiriyorum.',
+                exp_tt_li1: 'İlk aylarda THY için kapalı devre cüzdan uygulamasının <strong>core katmanında</strong> backend geliştirme çalışmaları',
+                exp_tt_li2: 'Mayıs 2024\'te mikroservis tabanlı <strong>açık devre cüzdan uygulamasının</strong> (REST-based, multi-module) geliştirilmesine başlama',
+                exp_tt_li3: '<strong>Backoffice, Core (cüzdan limitleri, kampanyalar, komisyonlar, işlemler, müşteri domainleri), Identity (KYC &amp; yüz tanıma), Campaign, Banking, Notification</strong> modüllerinde aktif geliştirme',
+                exp_tt_li4: 'Kapalı ve açık devre cüzdan uygulamalarının <strong>entegrasyon ve birleştirme</strong> sürecinde yer alma',
+                exp_tt_li5: 'Lisanslama altyapısının tamamlanmasının ardından <strong>TKPay</strong> markası altında çoklu iş ortağı yapısını destekleyen yeni sistemin geliştirilmesinde kurucu ekipte yer alma',
+                exp_date_tc: 'Ağustos 2022 — Ocak 2024',
+                exp_tc_desc: 'Turkcell Grup Şirketleri için ayda milyonlarca fatura işlenen faturalama uygulamalarında çalıştım.',
+                exp_tc_li1: 'GİB\'e UBL formatında e-fatura istekleri gönderilmesi ve faturalama akışının yönetimi',
+                exp_tc_li2: 'Yeni özellik geliştirme ve bug fix süreçleri ile proje kalitesinin sahiplenilmesi',
+                exp_tc_li3: '<strong>Microservices Redesign:</strong> Monolith yapıdaki SOAP ile haberleşen eski uygulamadan RESTful-Mikroservis mimarisine geçişte aktif geliştirme',
+                exp_role_intern: 'Stajyer', exp_date_ias: 'Mart 2022 — Mayıs 2022',
+                exp_ias_desc: 'Canias ERP projesi için Java 8 ile I18N çalışması. Spring Boot üzerine şirket içi sunum ve RESTful Blog API geliştirmesi.',
+                exp_uni: 'Erciyes Üniversitesi', exp_role_uni: 'Bilgisayar Mühendisliği — GPA: 3.23',
+                exp_uni_desc: 'Bilgisayar Mühendisliği lisans programı. Yazılım geliştirme, veri yapıları, algoritmalar ve sistem tasarımı konularında kapsamlı eğitim.',
+                proj_tag: 'Projeler', proj_title: 'Öne Çıkan Çalışmalarım', proj_subtitle: 'Profesyonel kariyerimde yer aldığım önemli projeler.',
+                proj1_title: 'TKPay Dijital Cüzdan', proj1_desc: 'THY grup şirketi TKPay\'in açık devre cüzdan uygulaması. KYC, yüz tanıma, kampanya yönetimi, komisyon sistemi ve çoklu iş ortağı desteği.',
+                proj2_title: 'THY Kapalı Devre Cüzdan', proj2_desc: 'Türk Hava Yolları için geliştirilen kapalı devre cüzdan uygulaması. Şirket içi ödeme ve bakiye yönetim sistemi.',
+                proj3_title: 'Turkcell E-Fatura Sistemi', proj3_desc: 'Turkcell Grup şirketleri için ayda milyonlarca fatura işlenen e-faturalama platformu. GİB entegrasyonu ve UBL format desteği.',
+                contact_tag: 'İletişim', contact_title: 'Birlikte Çalışalım',
+                contact_desc: 'Bir projeniz mi var ya da fintech alanında işbirliği mi yapmak istiyorsunuz? Aşağıdaki formu doldurun veya doğrudan ulaşın.',
+                cl_email: 'E-posta', cl_location: 'Konum', cl_location_val: 'İstanbul, Türkiye',
+                form_name: 'Adınız', form_name_ph: 'Adınızı girin', form_email: 'E-posta', form_email_ph: 'ornek@email.com', form_msg: 'Mesajınız', form_msg_ph: 'Projeniz hakkında bilgi verin...', form_submit: 'Mesaj Gönder'
+            },
+            en: {
+                nav_about: 'About', nav_tech: 'Technologies', nav_exp: 'Experience', nav_projects: 'Projects', nav_contact: 'Contact',
+                hero_eyebrow: 'Turkish Technology — TKPAY Open Wallet',
+                hero_title: 'Hi, I\'m<br><span class="gradient-text">Alihaydar SALMAN</span>',
+                hero_desc: 'A backend developer specializing in digital wallets and payment systems in the fintech space. I build clean architectures, high-performance and scalable solutions.',
+                hero_btn_exp: 'See My Experience ↓', hero_btn_contact: 'Get in Touch',
+                about_tag: 'About Me', about_title: 'Who I Am',
+                about_p1: 'I graduated from <strong>Erciyes University, Computer Engineering</strong>. Starting my career in 2022, I first worked on billing and e-invoicing systems at <strong>Turkcell Technology</strong>. I gained experience in high-volume systems processing millions of invoices per month and played an active role in migrating a heavy monolithic application to microservices architecture.',
+                about_p2: 'Since January 2024, I have been working at <strong>Turkish Technology</strong> (a Turkish Airlines group company). I work on digital wallet and payment technologies in the <strong>Fintech</strong> domain. Starting from a closed-loop wallet developed for Turkish Airlines\' internal use, I have been part of the backend team since before the establishment of <strong>TKPay, the open-loop wallet application</strong>.',
+                about_p3: 'Working in fintech means operating in an environment where every line of code directly impacts <strong>real money movements</strong>. From wallet balances to payment transactions, KYC verifications to campaign commission calculations, I work with <strong>zero error tolerance</strong> in every operation. With this critical sense of responsibility, I have designed and developed highly available <strong>event-driven microservice architectures</strong>, <strong>end-to-end encryption and Vault-based secret management</strong> to protect sensitive financial data, <strong>role-based access control (RBAC)</strong> with Keycloak, and <strong>asynchronous, reliable messaging infrastructures</strong> over Kafka. Regulatory compliance, auditability, and data integrity are always among my priorities.',
+                about_p4: 'I have actively worked on TKPay\'s open-loop wallet system across <strong>Core, Identity (KYC &amp; facial recognition), Campaign, Banking, Notification, and Backoffice</strong> modules. I have been involved from the beginning in developing the next-generation system architecture that supports multi-partner structures through the integration of closed and open-loop wallet applications.',
+                about_p5: 'Clean code, ownership mindset, and taking responsibility throughout the entire product lifecycle are my core values. I place great importance on continuous learning and adapting to new technologies.',
+                stat_exp: 'Years of Experience', stat_company: 'Major Companies', stat_domain: 'Area of Expertise', stat_founder: 'Founding Team',
+                tech_tag: 'Tech Stack', tech_title: 'Technologies I Use', tech_subtitle: 'The technology ecosystem I\'ve gained experience with across various projects and production environments over the years.',
+                tech_lang: 'Languages & Frameworks', tech_arch: 'Architecture & Integration', tech_msg: 'Messaging & Streaming', tech_db: 'Database & Storage', tech_test: 'Testing & API Tools', tech_devops: 'DevOps & CI/CD', tech_vcs: 'Version Control',
+                exp_tag: 'Experience', exp_title: 'My Career Journey', exp_subtitle: 'My professional growth story spanning from Turkcell to the Turkish Airlines ecosystem.',
+                exp_active: 'Active', exp_date_tt: 'Jan 2024 — Present',
+                exp_tt_desc: 'Developing digital wallet and payment systems in fintech at Turkish Technology, a subsidiary of Turkish Airlines.',
+                exp_tt_li1: 'Backend development on the <strong>core layer</strong> of a closed-loop wallet application for THY in the initial months',
+                exp_tt_li2: 'Started developing a microservices-based <strong>open-loop wallet application</strong> (REST-based, multi-module) in May 2024',
+                exp_tt_li3: 'Active development across <strong>Backoffice, Core (wallet limits, campaigns, commissions, transactions, customer domains), Identity (KYC &amp; facial recognition), Campaign, Banking, Notification</strong> modules',
+                exp_tt_li4: 'Participated in the <strong>integration and consolidation</strong> of closed and open-loop wallet applications',
+                exp_tt_li5: 'Part of the founding team for developing a new multi-partner system under the <strong>TKPay</strong> brand after licensing infrastructure completion',
+                exp_date_tc: 'Aug 2022 — Jan 2024',
+                exp_tc_desc: 'Worked on billing applications processing millions of invoices per month for Turkcell Group companies.',
+                exp_tc_li1: 'Sending e-invoice requests to the Revenue Administration in UBL format and managing the billing flow',
+                exp_tc_li2: 'Feature development and bug fix processes with project quality ownership',
+                exp_tc_li3: '<strong>Microservices Redesign:</strong> Active development in the migration from a monolithic SOAP-based application to RESTful microservices architecture',
+                exp_role_intern: 'Intern', exp_date_ias: 'Mar 2022 — May 2022',
+                exp_ias_desc: 'I18N work with Java 8 for the Canias ERP project. Internal presentation on Spring Boot and RESTful Blog API development.',
+                exp_uni: 'Erciyes University', exp_role_uni: 'Computer Engineering — GPA: 3.23',
+                exp_uni_desc: 'Bachelor\'s degree in Computer Engineering. Comprehensive education in software development, data structures, algorithms, and system design.',
+                proj_tag: 'Projects', proj_title: 'Featured Work', proj_subtitle: 'Key projects I\'ve been involved in throughout my professional career.',
+                proj1_title: 'TKPay Digital Wallet', proj1_desc: 'TKPay\\'s open-loop digital wallet application under the THY group. Features KYC, facial recognition, campaign management, commission system, and multi-partner support.',
+                proj2_title: 'THY Closed-Loop Wallet', proj2_desc: 'Closed-loop wallet application developed for Turkish Airlines. Internal payment and balance management system.',
+                proj3_title: 'Turkcell E-Invoice System', proj3_desc: 'E-invoicing platform processing millions of invoices per month for Turkcell Group companies. Revenue Administration integration and UBL format support.',
+                contact_tag: 'Contact', contact_title: 'Let\'s Work Together',
+                contact_desc: 'Have a project or want to collaborate in fintech? Fill out the form below or reach out directly.',
+                cl_email: 'Email', cl_location: 'Location', cl_location_val: 'Istanbul, Turkey',
+                form_name: 'Your Name', form_name_ph: 'Enter your name', form_email: 'Email', form_email_ph: 'example@email.com', form_msg: 'Your Message', form_msg_ph: 'Tell me about your project...', form_submit: 'Send Message'
             }
+        };
+
+        function setLang(lang) {
+            document.documentElement.setAttribute('data-lang', lang);
+            document.documentElement.setAttribute('lang', lang);
+            const langBtn = document.getElementById('langToggle');
+            langBtn.textContent = lang === 'tr' ? 'EN' : 'TR';
+            const t = translations[lang];
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+            document.querySelectorAll('[data-i18n-html]').forEach(el => {
+                const key = el.getAttribute('data-i18n-html');
+                if (t[key]) el.innerHTML = t[key];
+            });
+            document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+                const key = el.getAttribute('data-i18n-ph');
+                if (t[key]) el.placeholder = t[key];
+            });
+
+            localStorage.setItem('lang', lang);
+        }
+
+        const langToggle = document.getElementById('langToggle');
+        const savedLang = localStorage.getItem('lang') || 'tr';
+        if (savedLang === 'en') setLang('en');
+        langToggle.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-lang') || 'tr';
+            setLang(current === 'tr' ? 'en' : 'tr');
         });
     </script>
 </body>

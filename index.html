@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alihaydar SALMAN — Backend Developer | Fintech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-card: rgba(255,255,255,0.03);
+            --bg-card-hover: rgba(255,255,255,0.06);
+            --glass: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.08);
+            --text: #e4e4e7;
+            --text-muted: #71717a;
+            --text-dim: #52525b;
+            --accent: #6366f1;
+            --accent-light: #818cf8;
+            --accent-glow: rgba(99,102,241,0.15);
+            --accent-glow-strong: rgba(99,102,241,0.3);
+            --green: #22c55e;
+            --cyan: #06b6d4;
+            --amber: #f59e0b;
+            --rose: #f43f5e;
+            --gradient-1: linear-gradient(135deg, #6366f1, #8b5cf6, #a78bfa);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 6px;
+            --nav-bg: rgba(10,10,15,0.8);
+            --glow-1: rgba(99,102,241,0.12);
+            --glow-2: rgba(6,182,212,0.08);
+        }
+        [data-theme="light"] {
+            --bg-primary: #f5f5f7;
+            --bg-card: rgba(0,0,0,0.03);
+            --bg-card-hover: rgba(0,0,0,0.06);
+            --glass: rgba(0,0,0,0.04);
+            --glass-border: rgba(0,0,0,0.1);
+            --text: #1a1a2e;
+            --text-muted: #555568;
+            --text-dim: #777790;
+            --accent: #4f46e5;
+            --accent-light: #6366f1;
+            --accent-glow: rgba(79,70,229,0.1);
+            --accent-glow-strong: rgba(79,70,229,0.2);
+            --green: #16a34a;
+            --cyan: #0891b2;
+            --amber: #d97706;
+            --rose: #e11d48;
+            --gradient-1: linear-gradient(135deg, #4f46e5, #7c3aed, #8b5cf6);
+            --nav-bg: rgba(245,245,247,0.85);
+            --glow-1: rgba(99,102,241,0.06);
+            --glow-2: rgba(6,182,212,0.04);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-primary); color: var(--text); line-height: 1.7; overflow-x: hidden; }
+        ::selection { background: var(--accent-glow-strong); color: #fff; }
+
+        .glow-blob { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(120px); opacity: 0.4; }
+        .glow-1 { width: 500px; height: 500px; background: var(--glow-1); top: -10%; right: -5%; }
+        .glow-2 { width: 400px; height: 400px; background: var(--glow-2); bottom: 20%; left: -8%; }
+
+        nav { position: fixed; top: 0; width: 100%; z-index: 1000; background: var(--nav-bg); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid var(--glass-border); transition: background 0.4s; }
+        .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; height: 68px; }
+        .nav-logo { font-size: 1.2rem; font-weight: 800; text-decoration: none; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .nav-links { display: flex; gap: 0.5rem; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.25s; }
+        .nav-links a:hover { color: var(--text); background: var(--glass); }
+        .theme-toggle { background: var(--glass); border: 1px solid var(--glass-border); width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.35s; color: var(--text-muted); position: relative; overflow: hidden; flex-shrink: 0; }
+        .theme-toggle:hover { border-color: var(--accent); color: var(--accent-light); background: var(--accent-glow); transform: scale(1.1); }
+        .theme-toggle svg { width: 20px; height: 20px; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.3s; position: absolute; }
+        .theme-toggle .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
+        .theme-toggle .icon-sun { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+        [data-theme="light"] .theme-toggle .icon-moon { opacity: 0; transform: rotate(90deg) scale(0.5); color: #b0bcd4; }
+        [data-theme="light"] .theme-toggle .icon-sun { opacity: 1; transform: rotate(0deg) scale(1); color: #f59e0b; }
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 6px; }
+        .hamburger span { width: 22px; height: 2px; background: var(--text-muted); border-radius: 2px; transition: 0.3s; }
+
+        .hero { min-height: 100vh; display: flex; align-items: center; padding: 8rem 2rem 6rem; position: relative; }
+        .hero-inner { max-width: 1200px; margin: 0 auto; width: 100%; }
+        .hero-grid { display: grid; grid-template-columns: 1.3fr 0.7fr; align-items: center; gap: 3rem; }
+        .hero-left { }
+        .hero-photo { display: flex; justify-content: center; align-items: center; }
+        .photo-wrapper { position: relative; width: 280px; height: 280px; }
+        .photo-wrapper img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; position: relative; z-index: 2; border: 3px solid var(--glass-border); }
+        .photo-ring { position: absolute; inset: -8px; border-radius: 50%; background: var(--gradient-1); opacity: 0.3; z-index: 1; animation: ring-pulse 3s ease-in-out infinite; }
+        @keyframes ring-pulse { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.15; transform: scale(1.04); } }
+        .photo-placeholder { width: 280px; height: 280px; border-radius: 50%; background: var(--glass); border: 3px solid var(--glass-border); display: flex; align-items: center; justify-content: center; font-size: 4rem; font-weight: 800; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero-eyebrow { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--glass); border: 1px solid var(--glass-border); padding: 0.45rem 1.2rem; border-radius: 50px; font-size: 0.8rem; color: var(--accent-light); font-weight: 500; margin-bottom: 1.5rem; }
+        .hero-eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,197,94,0.4); } 50% { opacity: 0.8; box-shadow: 0 0 0 8px rgba(34,197,94,0); } }
+        .hero h1 { font-size: clamp(2.8rem, 6vw, 4.5rem); font-weight: 900; line-height: 1.08; letter-spacing: -0.04em; margin-bottom: 1.5rem; }
+        .hero h1 .gradient-text { background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero-desc { font-size: 1.15rem; color: var(--text-muted); max-width: 580px; line-height: 1.8; margin-bottom: 2.5rem; }
+        .hero-stack { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+        .hero-stack span { background: var(--glass); border: 1px solid var(--glass-border); padding: 0.35rem 0.9rem; border-radius: 6px; font-size: 0.78rem; color: var(--text-muted); font-weight: 500; transition: all 0.25s; }
+        .hero-stack span:hover { border-color: var(--accent); color: var(--accent-light); background: var(--accent-glow); }
+        .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .btn-glow { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 2rem; border-radius: 10px; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; border: none; cursor: pointer; }
+        .btn-glow.primary { background: var(--gradient-1); color: #fff; box-shadow: 0 4px 20px var(--accent-glow); }
+        .btn-glow.primary:hover { box-shadow: 0 6px 30px var(--accent-glow-strong); transform: translateY(-2px); }
+        .btn-glow.ghost { background: var(--glass); color: var(--text); border: 1px solid var(--glass-border); }
+        .btn-glow.ghost:hover { border-color: var(--accent); background: var(--accent-glow); }
+
+        section { padding: 6rem 2rem; position: relative; z-index: 1; }
+        .section-inner { max-width: 1200px; margin: 0 auto; }
+        .section-header { margin-bottom: 3.5rem; }
+        .section-tag { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.75rem; }
+        .section-tag::before { content: ''; width: 20px; height: 2px; background: var(--accent); border-radius: 2px; }
+        .section-title { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
+        .section-subtitle { color: var(--text-muted); margin-top: 0.75rem; max-width: 600px; font-size: 1rem; }
+
+        .about-card { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 2.5rem; position: relative; overflow: hidden; }
+        .about-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-1); }
+        .about-card p { color: var(--text-muted); font-size: 0.98rem; margin-bottom: 1.2rem; line-height: 1.8; }
+        .about-card p:last-child { margin-bottom: 0; }
+        .about-card strong { color: var(--text); font-weight: 600; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-top: 2.5rem; }
+        .stat-item { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius-sm); padding: 1.5rem; text-align: center; transition: all 0.3s; }
+        .stat-item:hover { border-color: var(--accent); background: var(--accent-glow); transform: translateY(-3px); }
+        .stat-value { font-size: 1.6rem; font-weight: 800; display: block; margin-bottom: 0.2rem; }
+        .stat-value.purple { color: var(--accent-light); }
+        .stat-value.cyan { color: var(--cyan); }
+        .stat-value.amber { color: var(--amber); }
+        .stat-value.green { color: var(--green); }
+        .stat-label { font-size: 0.78rem; color: var(--text-dim); font-weight: 500; }
+
+        #teknolojiler { border-top: 1px solid var(--glass-border); }
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
+        .tech-card { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-sm); padding: 1.5rem; transition: all 0.3s; }
+        .tech-card:hover { border-color: rgba(255,255,255,0.15); background: var(--bg-card-hover); transform: translateY(-2px); }
+        .tech-card-title { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; font-size: 0.88rem; font-weight: 600; color: var(--text); }
+        .tech-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .tech-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+        .tech-tag { background: var(--glass); border: 1px solid var(--glass-border); padding: 0.3rem 0.75rem; border-radius: var(--radius-xs); font-size: 0.78rem; font-weight: 500; color: var(--text-muted); transition: all 0.2s; }
+        .tech-tag:hover { color: var(--accent-light); border-color: var(--accent); background: var(--accent-glow); }
+
+        #deneyim { border-top: 1px solid var(--glass-border); }
+        .exp-list { display: flex; flex-direction: column; gap: 1.5rem; }
+        .exp-card { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 2rem; transition: all 0.3s; position: relative; overflow: hidden; }
+        .exp-card:hover { border-color: rgba(255,255,255,0.12); background: var(--bg-card-hover); }
+        .exp-card.active { border-color: rgba(99,102,241,0.3); }
+        .exp-card.active::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px; background: var(--gradient-1); }
+        .exp-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.75rem; }
+        .exp-company { font-size: 1.15rem; font-weight: 700; color: var(--text); }
+        .exp-role { font-size: 0.88rem; color: var(--accent-light); font-weight: 500; margin-top: 0.15rem; }
+        .exp-meta { display: flex; gap: 0.6rem; align-items: center; flex-shrink: 0; }
+        .exp-date { font-size: 0.78rem; color: var(--text-dim); background: var(--glass); padding: 0.3rem 0.8rem; border-radius: 50px; font-weight: 500; }
+        .exp-active-badge { font-size: 0.7rem; background: rgba(34,197,94,0.15); color: var(--green); padding: 0.25rem 0.7rem; border-radius: 50px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+        .exp-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.75; }
+        .exp-desc ul { list-style: none; margin-top: 0.6rem; }
+        .exp-desc ul li { position: relative; padding-left: 1.3rem; margin-bottom: 0.45rem; }
+        .exp-desc ul li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+        .exp-desc strong { color: var(--text); font-weight: 600; }
+        .exp-techs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 1rem; }
+        .exp-tech { background: var(--accent-glow); color: var(--accent-light); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+
+        #projeler { border-top: 1px solid var(--glass-border); }
+        .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; }
+        .proj-card { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 2rem; transition: all 0.3s; display: flex; flex-direction: column; }
+        .proj-card:hover { border-color: rgba(255,255,255,0.12); background: var(--bg-card-hover); transform: translateY(-4px); }
+        .proj-icon { width: 44px; height: 44px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 1.2rem; }
+        .proj-card:nth-child(1) .proj-icon { background: var(--accent-glow); color: var(--accent-light); }
+        .proj-card:nth-child(2) .proj-icon { background: rgba(6,182,212,0.15); color: var(--cyan); }
+        .proj-card:nth-child(3) .proj-icon { background: rgba(245,158,11,0.15); color: var(--amber); }
+        .proj-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 0.6rem; }
+        .proj-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.65; flex: 1; }
+        .proj-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 1.2rem; }
+        .proj-tag { background: var(--glass); border: 1px solid var(--glass-border); padding: 0.2rem 0.55rem; border-radius: 4px; font-size: 0.7rem; color: var(--text-dim); font-weight: 500; }
+
+        #iletisim { border-top: 1px solid var(--glass-border); }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 2.5rem; align-items: start; }
+        .contact-text p { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.98rem; }
+        .contact-links { display: flex; flex-direction: column; gap: 0.75rem; }
+        .contact-link { display: flex; align-items: center; gap: 1rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-sm); padding: 1rem 1.25rem; text-decoration: none; transition: all 0.25s; }
+        .contact-link:hover { border-color: var(--accent); background: var(--accent-glow); }
+        .cl-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+        .cl-icon.mail { background: rgba(244,63,94,0.12); color: var(--rose); }
+        .cl-icon.linkedin { background: rgba(6,182,212,0.12); color: var(--cyan); }
+        .cl-icon.github { background: rgba(255,255,255,0.06); color: var(--text); }
+        .cl-icon.loc { background: rgba(245,158,11,0.12); color: var(--amber); }
+        .cl-text { display: flex; flex-direction: column; }
+        .cl-label { font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+        .cl-value { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+
+        .contact-form-card { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 2rem; }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.04em; }
+        .form-group input, .form-group textarea { width: 100%; padding: 0.75rem 1rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius-xs); font-size: 0.9rem; font-family: inherit; color: var(--text); transition: all 0.25s; }
+        .form-group input::placeholder, .form-group textarea::placeholder { color: var(--text-dim); }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .form-group textarea { resize: vertical; min-height: 110px; }
+        .btn-submit { width: 100%; padding: 0.85rem; background: var(--gradient-1); color: #fff; border: none; border-radius: var(--radius-xs); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 16px var(--accent-glow); }
+        .btn-submit:hover { box-shadow: 0 6px 24px var(--accent-glow-strong); transform: translateY(-1px); }
+
+        footer { border-top: 1px solid var(--glass-border); padding: 2.5rem 2rem; text-align: center; }
+        .footer-inner { max-width: 1200px; margin: 0 auto; }
+        .footer-links { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1rem; }
+        .footer-links a { width: 38px; height: 38px; border-radius: 10px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--text-muted); font-size: 0.8rem; font-weight: 700; transition: all 0.25s; }
+        .footer-links a:hover { color: var(--accent-light); border-color: var(--accent); background: var(--accent-glow); }
+        footer p { font-size: 0.8rem; color: var(--text-dim); }
+
+        .fade-up { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; position: absolute; top: 68px; left: 0; right: 0; background: rgba(10,10,15,0.95); backdrop-filter: blur(20px); flex-direction: column; padding: 1rem; gap: 0.25rem; border-bottom: 1px solid var(--glass-border); }
+            .nav-links.open { display: flex; }
+            .hamburger { display: flex; }
+            .hero h1 { font-size: 2.4rem; }
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-photo { order: -1; }
+            .photo-wrapper { width: 200px; height: 200px; }
+            .photo-placeholder { width: 200px; height: 200px; font-size: 3rem; }
+            .hero-eyebrow { justify-content: center; }
+            .hero-stack { justify-content: center; }
+            .hero-actions { justify-content: center; }
+            .hero-desc { margin-left: auto; margin-right: auto; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .contact-grid { grid-template-columns: 1fr; }
+            .project-grid { grid-template-columns: 1fr; }
+            .tech-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-blob glow-1"></div>
+    <div class="glow-blob glow-2"></div>
+
+    <nav>
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">alihaydar.dev</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#hakkimda">Hakkımda</a></li>
+                <li><a href="#teknolojiler">Teknolojiler</a></li>
+                <li><a href="#deneyim">Deneyim</a></li>
+                <li><a href="#projeler">Projeler</a></li>
+                <li><a href="#iletisim">İletişim</a></li>
+            </ul>
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+                <button class="theme-toggle" id="themeToggle" aria-label="Tema Değiştir" title="Dark / Light Mod">
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Zm11.394-5.834a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59Zm-12.728.53a.75.75 0 1 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18Zm4.834-1.894a.75.75 0 0 0-1.06 1.06l1.59 1.591a.75.75 0 1 0 1.06-1.06l-1.59-1.591Zm-8.608 1.06a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12Z"/></svg>
+                </button>
+                <button class="hamburger" id="hamburger" aria-label="Menü"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-inner hero-grid">
+            <div class="hero-left">
+            <div class="hero-eyebrow"><span class="dot"></span> Turkish Technology — TKPAY E-Para</div>
+            <h1>Merhaba, ben<br><span class="gradient-text">Alihaydar SALMAN</span></h1>
+            <p class="hero-desc">Fintech alanında dijital cüzdan ve ödeme sistemleri üzerine uzmanlaşmış bir backend geliştiriciyim. Temiz mimari, yüksek performans ve ölçeklenebilir çözümler üretiyorum.</p>
+            <div class="hero-stack"><span>Java</span><span>Spring Boot</span><span>Microservices</span><span>Kafka</span><span>PostgreSQL</span><span>Kubernetes</span></div>
+            <div class="hero-actions">
+                <a href="#deneyim" class="btn-glow primary">Deneyimimi Gör ↓</a>
+                <a href="#iletisim" class="btn-glow ghost">İletişime Geç</a>
+            </div>
+            </div>
+            <div class="hero-photo">
+                <div class="photo-wrapper">
+                    <img src="photo.jpg" alt="Alihaydar SALMAN" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'>AS</div>'">
+                    <div class="photo-ring"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="hakkimda">
+        <div class="section-inner">
+            <div class="section-header fade-up"><div class="section-tag">Hakkımda</div><h2 class="section-title">Ben Kimim</h2></div>
+            <div class="about-card fade-up">
+                <p><strong>Erciyes Üniversitesi Bilgisayar Mühendisliği</strong> mezunuyum. Kariyerime 2022 yılında başlayarak, öncelikle <strong>Turkcell Teknoloji</strong>'de faturalama ve e-fatura sistemleri üzerinde çalıştım. Ayda milyonlarca fatura işlenen yüksek hacimli sistemlerde deneyim kazandım ve ağır monolith yapıdaki projenin mikroservis mimarisine geçiş projelerinde aktif rol aldım.</p>
+                <p>Ocak 2024'ten itibaren <strong>Turkish Technology</strong> (Türk Hava Yolları grup şirketi) bünyesinde görev alıyorum. <strong>Fintech</strong> alanında, dijital cüzdan ve ödeme teknolojileri üzerinde çalışmaktayım. Türk Hava Yolları'nın kendi kullanımı için geliştirilen kapalı devre cüzdan uygulamasından başlayarak, <strong> açık devre cüzdan olan TKPay cüzdan uygulamasının</strong> kuruluşundan öncesinden beri backend geliştirici olarak ekipte yer alıyorum.</p>
+                <p>Fintech sektöründe çalışmak, her satır kodun doğrudan <strong>gerçek para hareketlerini</strong> etkilediği bir ortam demektir. Kullanıcıların cüzdan bakiyelerinden ödeme işlemlerine, KYC doğrulamalarından kampanya komisyon hesaplamalarına kadar her operasyonda <strong>sıfır hata toleransı</strong> ile çalışıyorum. Bu kritik sorumluluk bilinciyle; yüksek erişilebilirlik sağlayan <strong>event-driven mikroservis mimarisi</strong>, hassas finansal verileri koruyan <strong>end-to-end şifreleme ve Vault tabanlı secret yönetimi</strong>, Keycloak ile <strong>rol bazlı erişim kontrolü (RBAC)</strong> ve Kafka üzerinden <strong>asenkron, güvenilir mesajlaşma altyapıları</strong> tasarlayıp geliştirdim. Regülasyona uyum, denetlenebilirlik ve veri bütünlüğü her zaman önceliklerim arasında yer alıyor.</p>
+                <p>TKPay'in açık devre cüzdan sisteminde <strong>Core, Identity (KYC &amp; yüz tanıma), Campaign, Banking, Notification ve Backoffice</strong> modüllerinde aktif olarak çalıştım. Kapalı ve açık devre cüzdan uygulamalarının entegrasyonu ile birlikte, çoklu iş ortağı yapısını destekleyen yeni nesil sistem mimarisinin geliştirilmesinde başından beri yer aldım.</p>
+                <p>Temiz kod, sahiplik bilinci ve ürünün tüm yaşam döngüsü boyunca sorumluluk almak benim için temel değerler. Sürekli öğrenmeye ve yeni teknolojilere adapte olmaya büyük önem veriyorum.</p>
+            </div>
+            <div class="stats-grid fade-up">
+                <div class="stat-item"><span class="stat-value purple">3.5+</span><span class="stat-label">Yıl Deneyim</span></div>
+                <div class="stat-item"><span class="stat-value cyan">2</span><span class="stat-label">Büyük Şirket</span></div>
+                <div class="stat-item"><span class="stat-value amber">Fintech</span><span class="stat-label">Uzmanlık Alanı</span></div>
+                <div class="stat-item"><span class="stat-value green">TKPay</span><span class="stat-label">Kurucu Ekip</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="teknolojiler">
+        <div class="section-inner">
+            <div class="section-header fade-up"><div class="section-tag">Teknoloji Yığını</div><h2 class="section-title">Kullandığım Teknolojiler</h2><p class="section-subtitle">Yıllar içerisinde çeşitli projeler ve üretim ortamlarında deneyim kazandığım teknoloji ekosistemi.</p></div>
+            <div class="tech-grid">
+                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--accent-light)"></span> Diller &amp; Framework'ler</div><div class="tech-tags"><span class="tech-tag">Java</span><span class="tech-tag">Kotlin</span><span class="tech-tag">Spring Boot</span><span class="tech-tag">Hibernate</span></div></div>
+                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--cyan)"></span> Mimari &amp; Entegrasyon</div><div class="tech-tags"><span class="tech-tag">Microservices</span><span class="tech-tag">RESTful API</span><span class="tech-tag">SOAP</span><span class="tech-tag">Activiti (BPM)</span></div></div>
+                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--amber)"></span> Mesajlaşma &amp; Streaming</div><div class="tech-tags"><span class="tech-tag">Apache Kafka</span></div></div>
+                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--green)"></span> Veritabanı &amp; Depolama</div><div class="tech-tags"><span class="tech-tag">PostgreSQL</span><span class="tech-tag">MinIO</span><span class="tech-tag">Keycloak</span><span class="tech-tag">Vault</span></div></div>
+                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--rose)"></span> Test &amp; API Araçları</div><div class="tech-tags"><span class="tech-tag">JUnit</span><span class="tech-tag">Postman</span><span class="tech-tag">SoapUI</span></div></div>
+                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:#a78bfa"></span> DevOps &amp; CI/CD</div><div class="tech-tags"><span class="tech-tag">Jenkins</span><span class="tech-tag">Kubernetes</span><span class="tech-tag">OpenShift</span><span class="tech-tag">Docker</span></div></div>
+                <div class="tech-card fade-up"><div class="tech-card-title"><span class="tech-dot" style="background:var(--cyan)"></span> Versiyon Kontrolü</div><div class="tech-tags"><span class="tech-tag">Git</span><span class="tech-tag">Bitbucket</span><span class="tech-tag">GitLab</span><span class="tech-tag">GitHub</span><span class="tech-tag">JIRA</span></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="deneyim">
+        <div class="section-inner">
+            <div class="section-header fade-up"><div class="section-tag">Deneyim</div><h2 class="section-title">Kariyer Yolculuğum</h2><p class="section-subtitle">Turkcell'den Türk Hava Yolları ekosistemine uzanan profesyonel gelişim hikayem.</p></div>
+            <div class="exp-list">
+                <div class="exp-card active fade-up">
+                    <div class="exp-top"><div><div class="exp-company">Turkish Technology</div><div class="exp-role">Software Developer</div></div><div class="exp-meta"><span class="exp-active-badge">Aktif</span><span class="exp-date">Ocak 2024 — Devam Ediyor</span></div></div>
+                    <div class="exp-desc">
+                        <p>Türk Hava Yolları'na ait Turkish Technology bünyesinde fintech alanında dijital cüzdan ve ödeme sistemleri geliştiriyorum.</p>
+                        <ul>
+                            <li>İlk aylarda THY için kapalı devre cüzdan uygulamasının <strong>core katmanında</strong> backend geliştirme çalışmaları</li>
+                            <li>Mayıs 2024'te mikroservis tabanlı <strong>açık devre cüzdan uygulamasının</strong> (REST-based, multi-module) geliştirilmesine başlama</li>
+                            <li><strong>Backoffice, Core (cüzdan limitleri, kampanyalar, komisyonlar, işlemler, müşteri domainleri), Identity (KYC &amp; yüz tanıma), Campaign, Banking, Notification</strong> modüllerinde aktif geliştirme</li>
+                            <li>Kapalı ve açık devre cüzdan uygulamalarının <strong>entegrasyon ve birleştirme</strong> sürecinde yer alma</li>
+                            <li>Lisanslama altyapısının tamamlanmasının ardından <strong>TKPay</strong> markası altında çoklu iş ortağı yapısını destekleyen yeni sistemin geliştirilmesinde kurucu ekipte yer alma</li>
+                        </ul>
+                        <div class="exp-techs"><span class="exp-tech">Java 17</span><span class="exp-tech">Spring Boot</span><span class="exp-tech">Microservices</span><span class="exp-tech">Kafka</span><span class="exp-tech">PostgreSQL</span><span class="exp-tech">Keycloak</span><span class="exp-tech">Kubernetes</span></div>
+                    </div>
+                </div>
+                <div class="exp-card fade-up">
+                    <div class="exp-top"><div><div class="exp-company">Turkcell Teknoloji</div><div class="exp-role">Software Developer</div></div><span class="exp-date">Ağustos 2022 — Ocak 2024</span></div>
+                    <div class="exp-desc">
+                        <p>Turkcell Grup Şirketleri için ayda milyonlarca fatura işlenen faturalama uygulamalarında çalıştım.</p>
+                        <ul>
+                            <li>GİB'e UBL formatında e-fatura istekleri gönderilmesi ve faturalama akışının yönetimi</li>
+                            <li>Yeni özellik geliştirme ve bug fix süreçleri ile proje kalitesinin sahiplenilmesi</li>
+                            <li><strong>Microservices Redesign:</strong> monolith ve SOAP ile haberleşen uygulamadan RESTful-Mikroservis mimarisine geçiş projesinde aktif geliştirme</li>
+                        </ul>
+                        <div class="exp-techs"><span class="exp-tech">Java 8</span><span class="exp-tech">Spring Boot</span><span class="exp-tech">SOAP</span><span class="exp-tech">Microservices</span><span class="exp-tech">Jenkins</span></div>
+                    </div>
+                </div>
+                <div class="exp-card fade-up">
+                    <div class="exp-top"><div><div class="exp-company">IAS (Industrial Application Software)</div><div class="exp-role">Stajyer</div></div><span class="exp-date">Mart 2022 — Mayıs 2022</span></div>
+                    <div class="exp-desc">
+                        <p>Canias ERP projesi için Java 8 ile I18N çalışması. Spring Boot üzerine şirket içi sunum ve RESTful Blog API geliştirmesi.</p>
+                        <div class="exp-techs"><span class="exp-tech">Java 8</span><span class="exp-tech">Spring Boot</span><span class="exp-tech">REST API</span></div>
+                    </div>
+                </div>
+                <div class="exp-card fade-up">
+                    <div class="exp-top"><div><div class="exp-company">Erciyes Üniversitesi</div><div class="exp-role">Bilgisayar Mühendisliği — GPA: 3.23</div></div><span class="exp-date">2017 — 2022</span></div>
+                    <div class="exp-desc"><p>Bilgisayar Mühendisliği lisans programı. Yazılım geliştirme, veri yapıları, algoritmalar ve sistem tasarımı konularında kapsamlı eğitim.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projeler">
+        <div class="section-inner">
+            <div class="section-header fade-up"><div class="section-tag">Projeler</div><h2 class="section-title">Öne Çıkan Çalışmalarım</h2><p class="section-subtitle">Profesyonel kariyerimde yer aldığım önemli projeler.</p></div>
+            <div class="project-grid">
+                <div class="proj-card fade-up"><div class="proj-icon">💳</div><h3>TKPay Dijital Cüzdan</h3><p>THY grup şirketi TKPay'in açık devre cüzdan uygulaması. KYC, yüz tanıma, kampanya yönetimi, komisyon sistemi ve çoklu iş ortağı desteği.</p><div class="proj-tags"><span class="proj-tag">Java 17</span><span class="proj-tag">Spring Boot</span><span class="proj-tag">Kafka</span><span class="proj-tag">PostgreSQL</span></div></div>
+                <div class="proj-card fade-up"><div class="proj-icon">✈</div><h3>THY Kapalı Devre Cüzdan</h3><p>Türk Hava Yolları için geliştirilen kapalı devre cüzdan uygulaması. Şirket içi ödeme ve bakiye yönetim sistemi.</p><div class="proj-tags"><span class="proj-tag">Java</span><span class="proj-tag">Microservices</span><span class="proj-tag">Keycloak</span></div></div>
+                <div class="proj-card fade-up"><div class="proj-icon">📄</div><h3>Turkcell E-Fatura Sistemi</h3><p>Turkcell Grup şirketleri için ayda milyonlarca fatura işlenen e-faturalama platformu. GİB entegrasyonu ve UBL format desteği.</p><div class="proj-tags"><span class="proj-tag">Java 8</span><span class="proj-tag">SOAP</span><span class="proj-tag">Jenkins</span></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="iletisim">
+        <div class="section-inner">
+            <div class="section-header fade-up"><div class="section-tag">İletişim</div><h2 class="section-title">Birlikte Çalışalım</h2></div>
+            <div class="contact-grid">
+                <div class="contact-text fade-up">
+                    <p>Bir projeniz mi var ya da fintech alanında işbirliği mi yapmak istiyorsunuz? Aşağıdaki formu doldurun veya doğrudan ulaşın.</p>
+                    <div class="contact-links">
+                        <a href="mailto:salmanalihaydarr@gmail.com" class="contact-link"><div class="cl-icon mail">@</div><div class="cl-text"><span class="cl-label">E-posta</span><span class="cl-value">salmanalihaydarr@gmail.com</span></div></a>
+                        <a href="https://linkedin.com/in/alihaydarsalman" target="_blank" class="contact-link"><div class="cl-icon linkedin">in</div><div class="cl-text"><span class="cl-label">LinkedIn</span><span class="cl-value">linkedin.com/in/alihaydarsalman</span></div></a>
+                        <a href="https://github.com/alihaydarsalman" target="_blank" class="contact-link"><div class="cl-icon github">GH</div><div class="cl-text"><span class="cl-label">GitHub</span><span class="cl-value">github.com/alihaydarsalman</span></div></a>
+                        <div class="contact-link" style="cursor:default;"><div class="cl-icon loc">⚲</div><div class="cl-text"><span class="cl-label">Konum</span><span class="cl-value">İstanbul, Türkiye</span></div></div>
+                    </div>
+                </div>
+                <form class="contact-form-card fade-up" onsubmit="handleSubmit(event)">
+                    <div class="form-group"><label for="name">Adınız</label><input type="text" id="name" placeholder="Adınızı girin" required></div>
+                    <div class="form-group"><label for="email">E-posta</label><input type="email" id="email" placeholder="ornek@email.com" required></div>
+                    <div class="form-group"><label for="message">Mesajınız</label><textarea id="message" placeholder="Projeniz hakkında bilgi verin..." required></textarea></div>
+                    <button type="submit" class="btn-submit">Mesaj Gönder</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-links">
+                <a href="https://github.com/alihaydarsalman" target="_blank" title="GitHub">GH</a>
+                <a href="https://linkedin.com/in/alihaydarsalman" target="_blank" title="LinkedIn">in</a>
+                <a href="mailto:salmanalihaydarr@gmail.com" title="E-posta">@</a>
+            </div>
+            <p>© 2026 Alihaydar SALMAN · Backend Developer · İstanbul</p>
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+        navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('open')));
+        const obs = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.08 });
+        document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+        function handleSubmit(e) { e.preventDefault(); const btn = e.target.querySelector('.btn-submit'); btn.textContent = 'Gönderildi!'; btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)'; setTimeout(() => { btn.textContent = 'Mesaj Gönder'; btn.style.background = ''; e.target.reset(); }, 2500); }
+
+        // Theme Toggle (Güneş / Hilal)
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') html.setAttribute('data-theme', 'light');
+        themeToggle.addEventListener('click', () => {
+            const isLight = html.getAttribute('data-theme') === 'light';
+            if (isLight) {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
+</body>
+</html>
